@@ -1,0 +1,29 @@
+.container {
+    padding: 2px 5px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+}
+
+.container:hover {
+    background-color: lightcoral;
+}
+
+.icon {
+    display: flex;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.fileName {
+    flex: 1;
+}
+
+.fileActions {
+    display: flex;
+}
+
+.fileActions > .icon {
+    cursor: pointer;
+}
