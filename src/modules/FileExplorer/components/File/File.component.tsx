@@ -23,15 +23,18 @@ export interface FileProps {
     fileType: FileType;
     name: string;
     id: string;
-    isOpen: boolean;
+    isOpen?: boolean;
+    level: number;
 }
 
-const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
+const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
     const [fileName, setFileName] = useState<string>(name);
     const [children, setChildren] = useState<FileProps[]>([]);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
     const { files } = useSelector((state: any) => state.filesData);
+    console.log("here", files);
+    
     const dispatch = useDispatch();
 
     const inputRef: React.LegacyRef<HTMLInputElement> = useRef(null);
@@ -69,6 +72,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
                 fileName: `${name}_${children?.length}`,
                 parentId: id,
                 fileType: FileType.FILE,
+                level: level + 1,
             })
         );
     };
@@ -83,6 +87,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
                 fileName: `${name}_${children?.length}`,
                 parentId: id,
                 fileType: FileType.FOLDER,
+                level: level + 1,
             })
         );
     };
@@ -96,6 +101,8 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
     };
 
     const onFileNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
         setFileName(e.target.value);
     };
 
@@ -110,11 +117,13 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
         <>
             <div
                 className={styles.container}
-                onClick={() =>
-                    dispatch(setIsOpen({ openState: !isOpen, id: id }))
-                }
+                style={{ paddingLeft: `${10 * level + 5}px` }}
+                onClick={() => {
+                    !isEditingFileName && dispatch(setIsOpen({ openState: !isOpen, id: id }));
+                }}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
+                title={name}
             >
                 <div className={styles.icon}>
                     {fileType === FileType.FILE && (
@@ -134,6 +143,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
                 {isEditingFileName && (
                     <input
                         ref={inputRef}
+                        className={styles.fileName}
                         defaultValue={fileName}
                         onChange={onFileNameChange}
                         onKeyDown={(e) => {
@@ -182,11 +192,11 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen }) => {
                 )}
             </div>
             {!!children?.length && isOpen && (
-                <div style={{ paddingLeft: "20px" }}>
+                <>
                     {children.map((childFile: FileProps) => (
                         <File key={childFile.id} {...childFile} />
                     ))}
-                </div>
+                </>
             )}
         </>
     );

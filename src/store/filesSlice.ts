@@ -12,6 +12,7 @@ const initialState: { files: Record<string, FileProps> } = {
             id: "root",
             name: "src",
             isOpen: true,
+            level: 0,
         },
     },
 };
@@ -24,13 +25,14 @@ const filesSlice = createSlice({
             console.log("props: ", props);
 
             const id = getID();
-            const { fileName, parentId, fileType } = props.payload;
+            const { fileName, parentId, fileType, level } = props.payload;
             state.files[id] = {
                 fileType: fileType,
                 id: id,
                 name: fileName,
                 parentId: parentId,
                 isOpen: fileType === FileType.FILE ? true : false,
+                level,
             };
             state.files[parentId].isOpen = true;
         },
