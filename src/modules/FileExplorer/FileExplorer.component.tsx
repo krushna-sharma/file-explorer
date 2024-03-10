@@ -1,37 +1,14 @@
 import React, { Suspense, lazy } from "react";
-import { FileProps, FileType } from "./components/File/File.component";
 import styles from "./FileExplorer.module.css";
 import { useSelector } from "react-redux";
+import { filesData } from "../../store/filesSlice";
 
 const FileList = lazy(
     () => import("./components/FilesList/FilesList.component")
 );
 
-export const data: FileProps[] = [
-    {
-        fileType: FileType.FOLDER,
-        id: "root",
-        name: "src",
-        isOpen: false
-        //     children: [
-        //         { fileType: FileType.FILE, name: "App.tsx" },
-        //         { fileType: FileType.FILE, name: "App.css" },
-        //         {
-        //             fileType: FileType.FOLDER,
-        //             name: "__tests__",
-        //             children: [{ fileType: FileType.FILE, name: "test.tsx" }],
-        //         },
-        //     ],
-        // },
-        // {
-        //     fileType: FileType.FILE,
-        //     name: "package.json",
-    },
-];
-
 const FileExplorer = () => {
-    const { files } = useSelector((state: any) => state.filesData);
-    console.log(files);
+    const files = useSelector(filesData);
 
     return (
         <div className={styles.container}>

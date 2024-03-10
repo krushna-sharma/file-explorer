@@ -1,17 +1,16 @@
-import {
-    FileProps,
-    FileType,
-} from "../modules/FileExplorer/components/File/File.component";
+import { FileProps } from "../modules/FileExplorer/components/File/File.component";
 import { createSlice } from "@reduxjs/toolkit";
 import { getID } from "../utils/common";
+import { RootState } from ".";
 
 const initialState: { files: Record<string, FileProps> } = {
     files: {
         root: {
-            fileType: FileType.FOLDER,
+            fileType: "folder",
             id: "root",
             name: "src",
-            isOpen: true,
+            isOpen: false,
+            level: 0,
         },
     },
 };
@@ -21,16 +20,15 @@ const filesSlice = createSlice({
     initialState: initialState,
     reducers: {
         addFile: (state, props) => {
-            console.log("props: ", props);
-
             const id = getID();
-            const { fileName, parentId, fileType } = props.payload;
+            const { fileName, parentId, fileType, level } = props.payload;
             state.files[id] = {
                 fileType: fileType,
                 id: id,
                 name: fileName,
                 parentId: parentId,
-                isOpen: fileType === FileType.FILE ? true : false,
+                isOpen: fileType === "file" ? true : false,
+                level,
             };
             state.files[parentId].isOpen = true;
         },
@@ -51,7 +49,7 @@ const filesSlice = createSlice({
         },
     },
 });
-
+export const filesData = (state: RootState) => state.files.files;
 export const { addFile, setIsOpen, editFileName, deleteFile } =
     filesSlice.actions;
 export default filesSlice.reducer;

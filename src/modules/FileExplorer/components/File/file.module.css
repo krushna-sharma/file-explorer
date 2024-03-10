@@ -6,7 +6,7 @@
 }
 
 .container:hover {
-    background-color: lightcoral;
+    background-color: #343434;
 }
 
 .icon {
@@ -17,13 +17,26 @@
 }
 
 .fileName {
-    flex: 1;
+    width: 100%;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .fileActions {
     display: flex;
+    justify-content: flex-end;
 }
 
 .fileActions > .icon {
     cursor: pointer;
+}
+
+input {
+    background-color: #343434;
+    color: white;
+    border: 1px solid white;
+    outline: none;
+    font-size: 16px;
+    user-select: all;
 }
