@@ -39,5 +39,6 @@ jobs:
       - run: yarn --version
       - run: yarn
       - run: yarn run test
+      - run: yarn run test:coverage
       - run: yarn run build
       - run: sudo rm -rf build-prod
