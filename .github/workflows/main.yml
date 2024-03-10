@@ -35,8 +35,9 @@ jobs:
         with:
           node-version: ${{ matrix.node_version }}
           architecture: ${{ matrix.architecture }}
-      - run: npm install -g npm@latest 
-      - run: npm install
-      - run: npm test
-      - run: npm run build
+      - run: npm install -g yarn 
+      - run: yarn --version
+      - run: yarn
+      - run: yarn run test
+      - run: yarn run build
       - run: sudo rm -rf build-prod
