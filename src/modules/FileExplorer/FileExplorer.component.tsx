@@ -9,7 +9,6 @@ const FileList = lazy(
 
 const FileExplorer = () => {
     const files = useSelector(filesData);
-    console.log(files);
 
     return (
         <div className={styles.container}>

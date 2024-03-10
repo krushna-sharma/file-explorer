@@ -68,7 +68,6 @@ describe("Testing File component...", () => {
         );
         let fileComponent = screen.getByText("test.tsx");
         userEvent.hover(fileComponent);
-        screen.debug();
         expect(screen.getByTestId("editIcon")).toBeInTheDocument();
         expect(screen.getByTestId("deleteIcon")).toBeInTheDocument();
     });

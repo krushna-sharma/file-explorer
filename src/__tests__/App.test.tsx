@@ -1,11 +1,11 @@
 import { act, render, screen, waitFor } from "@testing-library/react";
 import App from "../App";
+import { renderWithProviders } from "../store/utils";
 
 it("renders without crashing", async () => {
-    render(<App />);
+    renderWithProviders(<App />);
     await waitFor(() => {
-        screen.debug();
+        expect(screen.getByText("src")).toBeInTheDocument();
     });
-    
     
 });

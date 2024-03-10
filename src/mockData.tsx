@@ -1,4 +1,4 @@
-import { FileProps } from "../modules/FileExplorer/components/File/File.component";
+import { FileProps } from "./modules/FileExplorer/components/File/File.component";
 
 export const data: Record<string, FileProps> = {
     root: {

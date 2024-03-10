@@ -31,7 +31,6 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
     const [isHovering, setIsHovering] = useState(false);
     const files = useAppSelector(filesData);
     const dispatch = useAppDispatch();
-    console.log("here", files);
 
     const inputRef: React.LegacyRef<HTMLInputElement> = useRef(null);
 

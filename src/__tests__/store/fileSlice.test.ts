@@ -4,7 +4,7 @@ import reducer, {
     editFileName,
     deleteFile,
 } from "../../store/filesSlice";
-import { data } from "../mockData";
+import { data } from "../../mockData";
 import * as Utils from "../../utils/common";
 
 test("should return the initial state", () => {
