@@ -1,15 +1,16 @@
 import React, { Suspense, lazy } from "react";
 import styles from "./FileExplorer.module.css";
 import { useSelector } from "react-redux";
+import { filesData } from "../../store/filesSlice";
 
 const FileList = lazy(
     () => import("./components/FilesList/FilesList.component")
 );
 
 const FileExplorer = () => {
-    const { files } = useSelector((state: any) => state.filesData);
+    const files = useSelector(filesData);
     console.log(files);
-    
+
     return (
         <div className={styles.container}>
             <Suspense fallback="loading...">

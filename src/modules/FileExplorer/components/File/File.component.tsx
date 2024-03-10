@@ -1,5 +1,4 @@
 import React, { FC, useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import FileIcon from "./Icons/file_icon.png";
 import FolderIcon from "./Icons/folder_icon.png";
 import FolderOpenIcon from "./Icons/folder_open_icon.png";
@@ -11,16 +10,14 @@ import {
     setIsOpen,
     deleteFile,
     editFileName,
+    filesData,
 } from "../../../../store/filesSlice";
-
-export enum FileType {
-    FILE,
-    FOLDER,
-}
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import IconButton from "./IconButton";
 
 export interface FileProps {
     parentId?: string;
-    fileType: FileType;
+    fileType: "file" | "folder";
     name: string;
     id: string;
     isOpen?: boolean;
@@ -32,10 +29,9 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
     const [children, setChildren] = useState<FileProps[]>([]);
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
-    const { files } = useSelector((state: any) => state.filesData);
+    const files = useAppSelector(filesData);
+    const dispatch = useAppDispatch();
     console.log("here", files);
-    
-    const dispatch = useDispatch();
 
     const inputRef: React.LegacyRef<HTMLInputElement> = useRef(null);
 
@@ -71,7 +67,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
             addFile({
                 fileName: `${name}_${children?.length}`,
                 parentId: id,
-                fileType: FileType.FILE,
+                fileType: "file",
                 level: level + 1,
             })
         );
@@ -86,7 +82,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
             addFile({
                 fileName: `${name}_${children?.length}`,
                 parentId: id,
-                fileType: FileType.FOLDER,
+                fileType: "folder",
                 level: level + 1,
             })
         );
@@ -119,17 +115,18 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
                 className={styles.container}
                 style={{ paddingLeft: `${10 * level + 5}px` }}
                 onClick={() => {
-                    !isEditingFileName && dispatch(setIsOpen({ openState: !isOpen, id: id }));
+                    !isEditingFileName &&
+                        dispatch(setIsOpen({ openState: !isOpen, id: id }));
                 }}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 title={name}
             >
                 <div className={styles.icon}>
-                    {fileType === FileType.FILE && (
+                    {fileType === "file" && (
                         <img src={FileIcon} alt="file_icon" />
                     )}
-                    {fileType === FileType.FOLDER && (
+                    {fileType === "folder" && (
                         <img
                             src={isOpen ? FolderOpenIcon : FolderIcon}
                             alt="folder_icon"
@@ -157,36 +154,34 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
 
                 {isHovering && (
                     <div className={styles.fileActions}>
-                        <img
-                            className={styles.icon}
-                            src={EditIcon}
-                            alt="edit_icon"
+                        <IconButton
+                            dataTestId="editIcon"
+                            altText="edit_icon"
                             onClick={onEditClick}
+                            src={EditIcon}
                         />
 
-                        {fileType === FileType.FOLDER && (
+                        {fileType === "folder" && (
                             <>
-                                <img
-                                    className={styles.icon}
-                                    src={FileIcon}
-                                    alt="add_new_file_icon"
+                                <IconButton
+                                    dataTestId="addFileIcon"
+                                    altText="add_new_file_icon"
                                     onClick={onNewFileClick}
+                                    src={FileIcon}
                                 />
-
-                                <img
-                                    className={styles.icon}
-                                    src={FolderIcon}
-                                    alt="add_new_folder_icon"
+                                <IconButton
+                                    dataTestId="addFolderIcon"
+                                    altText="add_new_folder_icon"
                                     onClick={onNewFolderClick}
+                                    src={FolderIcon}
                                 />
                             </>
                         )}
-
-                        <img
-                            className={styles.icon}
-                            src={DeleteIcon}
-                            alt="delete_icon"
+                        <IconButton
+                            dataTestId="deleteIcon"
+                            altText="delete_icon"
                             onClick={onDeleteClick}
+                            src={DeleteIcon}
                         />
                     </div>
                 )}

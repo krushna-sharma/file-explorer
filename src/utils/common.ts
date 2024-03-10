@@ -1,4 +1,4 @@
-const generateRandomID = (length: number) => {
+export const generateRandomID = (length: number) => {
     const characters =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
         charLength = characters.length;
@@ -10,6 +10,4 @@ const generateRandomID = (length: number) => {
     return result;
 };
 
-export const getID = () => {
-    return generateRandomID(8);
-};
+export const getID = (l:number = 2) => generateRandomID(8);
