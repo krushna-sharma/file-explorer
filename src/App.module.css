@@ -1,0 +1,14 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+}
+
+.FileExplorer {
+    width: 300px;
+    height: 100%;
+}
+
+.content{
+    padding: 10px;
+}

@@ -30,7 +30,9 @@ const filesSlice = createSlice({
                 isOpen: fileType === "file" ? true : false,
                 level,
             };
-            state.files[parentId].isOpen = true;
+            if (parentId) {
+                state.files[parentId].isOpen = true;
+            }
         },
         setIsOpen: (state, props) => {
             // TODO: Might want to check if we want to close all of child folder as well.

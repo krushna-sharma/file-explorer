@@ -2,8 +2,6 @@ import React, { FC, useState, useEffect, useRef } from "react";
 import FileIcon from "./Icons/file_icon.png";
 import FolderIcon from "./Icons/folder_icon.png";
 import FolderOpenIcon from "./Icons/folder_open_icon.png";
-import EditIcon from "./Icons/edit_icon.png";
-import DeleteIcon from "./Icons/delete_icon.png";
 import styles from "./file.module.css";
 import {
     addFile,
@@ -13,7 +11,7 @@ import {
     filesData,
 } from "../../../../store/filesSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import IconButton from "./IconButton";
+import FileActions from "../FileActions/FileActions.component";
 
 export interface FileProps {
     parentId?: string;
@@ -151,39 +149,14 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
                     ></input>
                 )}
 
-                {isHovering && (
-                    <div className={styles.fileActions}>
-                        <IconButton
-                            dataTestId="editIcon"
-                            altText="edit_icon"
-                            onClick={onEditClick}
-                            src={EditIcon}
-                        />
-
-                        {fileType === "folder" && (
-                            <>
-                                <IconButton
-                                    dataTestId="addFileIcon"
-                                    altText="add_new_file_icon"
-                                    onClick={onNewFileClick}
-                                    src={FileIcon}
-                                />
-                                <IconButton
-                                    dataTestId="addFolderIcon"
-                                    altText="add_new_folder_icon"
-                                    onClick={onNewFolderClick}
-                                    src={FolderIcon}
-                                />
-                            </>
-                        )}
-                        <IconButton
-                            dataTestId="deleteIcon"
-                            altText="delete_icon"
-                            onClick={onDeleteClick}
-                            src={DeleteIcon}
-                        />
-                    </div>
-                )}
+                <FileActions
+                    show={isHovering}
+                    fileType={fileType}
+                    onEditClick={onEditClick}
+                    onNewFileClick={onNewFileClick}
+                    onNewFolderClick={onNewFolderClick}
+                    onDeleteClick={onDeleteClick}
+                />
             </div>
             {!!children?.length && isOpen && (
                 <>
