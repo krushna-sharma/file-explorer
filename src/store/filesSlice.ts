@@ -46,7 +46,20 @@ const filesSlice = createSlice({
         },
 
         deleteFile: (state, props) => {
-            // TODO: Should also delete all its children if it is a folder
+            for (const key in state.files) {
+                if (state.files[key].parentId === props.payload.id) {
+                    // Recursively call deleteFile function for all its children
+                    if (state.files[key].fileType === "folder") {
+                        filesSlice.caseReducers.deleteFile(state, {
+                            payload: {
+                                id: state.files[key].id,
+                            },
+                            type: "filesData/deleteFile",
+                        });
+                    }
+                    delete state.files[key];
+                }
+            }
             delete state.files[props.payload.id];
         },
     },
