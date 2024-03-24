@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { Provider } from "react-redux";
 import { setupStore } from "./store";
 import FileExplorer from "./modules/FileExplorer/FileExplorer.component";
 import styles from "./App.module.css";
 // import Markdown from "react-markdown";
-import axios from "axios";
+// import axios from "axios";
 
 function App() {
-    const [markdown, setMarkdown] = useState("# Hi, *INDIA*!");
+    // const [markdown, setMarkdown] = useState("# Hi, *INDIA*!");
 
     // useEffect(() => {
     //     const fetchData = async () => {
