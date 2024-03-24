@@ -22,7 +22,6 @@ const FileExplorer = () => {
             addFile({
                 fileName: `new_file`,
                 fileType: "file",
-                level: 0,
             })
         );
     };
@@ -36,7 +35,6 @@ const FileExplorer = () => {
             addFile({
                 fileName: `new_folder`,
                 fileType: "folder",
-                level: 0,
             })
         );
     };
@@ -46,7 +44,6 @@ const FileExplorer = () => {
             <div style={{padding: '10px'}}>
                 <FileActions
                     show
-                    fileType="folder"
                     isTab
                     onNewFileClick={onNewFileClick}
                     onNewFolderClick={onNewFolderClick}

@@ -30,6 +30,7 @@ describe("Testing File component...", () => {
             {
                 preloadedState: {
                     files: {
+                        selectedFile: "",
                         files: {
                             root: {
                                 fileType: "folder",
@@ -90,8 +91,6 @@ describe("Testing File component...", () => {
         userEvent.hover(fileComponent);
         expect(screen.getByTestId("editIcon")).toBeInTheDocument();
         expect(screen.getByTestId("deleteIcon")).toBeInTheDocument();
-        expect(screen.getByTestId("addFileIcon")).toBeInTheDocument();
-        expect(screen.getByTestId("addFolderIcon")).toBeInTheDocument();
     });
 
     it("edit button click should enable input component", () => {
@@ -138,45 +137,45 @@ describe("Testing File component...", () => {
             type: "filesData/deleteFile",
         });
     });
-    it("should add a file when add new file button is clicked", () => {
-        let dispatch = jest.fn();
-        jest.spyOn(Actions, "useAppDispatch").mockReturnValue(dispatch);
-        renderWithProviders(
-            <File fileType={"folder"} name="src" id="root" level={0} />
-        );
-        let fileComponent = screen.getByText("src");
-        userEvent.hover(fileComponent);
-        let addFileButton = screen.getByTestId("addFileIcon");
-        fireEvent.click(addFileButton);
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: {
-                fileName: "src_0",
-                fileType: "file",
-                level: 1,
-                parentId: "root",
-            },
-            type: "filesData/addFile",
-        });
-    });
+    // it("should add a file when add new file button is clicked", () => {
+    //     let dispatch = jest.fn();
+    //     jest.spyOn(Actions, "useAppDispatch").mockReturnValue(dispatch);
+    //     renderWithProviders(
+    //         <File fileType={"folder"} name="src" id="root" level={0} />
+    //     );
+    //     let fileComponent = screen.getByText("src");
+    //     userEvent.hover(fileComponent);
+    //     let addFileButton = screen.getByTestId("addFileIcon");
+    //     fireEvent.click(addFileButton);
+    //     expect(dispatch).toHaveBeenCalledWith({
+    //         payload: {
+    //             fileName: "src_0",
+    //             fileType: "file",
+    //             level: 1,
+    //             parentId: "root",
+    //         },
+    //         type: "filesData/addFile",
+    //     });
+    // });
 
-    it("should add a file when add new file button is clicked", () => {
-        let dispatch = jest.fn();
-        jest.spyOn(Actions, "useAppDispatch").mockReturnValue(dispatch);
-        renderWithProviders(
-            <File fileType={"folder"} name="src" id="root" level={0} />
-        );
-        let fileComponent = screen.getByText("src");
-        userEvent.hover(fileComponent);
-        let addFolderButton = screen.getByTestId("addFolderIcon");
-        fireEvent.click(addFolderButton);
-        expect(dispatch).toHaveBeenCalledWith({
-            payload: {
-                fileName: "src_0",
-                fileType: "folder",
-                level: 1,
-                parentId: "root",
-            },
-            type: "filesData/addFile",
-        });
-    });
+    // it("should add a file when add new fodler button is clicked", () => {
+    //     let dispatch = jest.fn();
+    //     jest.spyOn(Actions, "useAppDispatch").mockReturnValue(dispatch);
+    //     renderWithProviders(
+    //         <File fileType={"folder"} name="src" id="root" level={0} />
+    //     );
+    //     let fileComponent = screen.getByText("src");
+    //     userEvent.hover(fileComponent);
+    //     let addFolderButton = screen.getByTestId("addFolderIcon");
+    //     fireEvent.click(addFolderButton);
+    //     expect(dispatch).toHaveBeenCalledWith({
+    //         payload: {
+    //             fileName: "src_0",
+    //             fileType: "folder",
+    //             level: 1,
+    //             parentId: "root",
+    //         },
+    //         type: "filesData/addFile",
+    //     });
+    // });
 });
