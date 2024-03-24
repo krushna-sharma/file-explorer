@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styles from "./file.module.css";
 
 interface IconButtonProps {
-    onClick: (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
+    onClick?: (e: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
     src: string;
     dataTestId: string;
     altText: string;

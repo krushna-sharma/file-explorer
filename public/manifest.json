@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "File Explorer",
+  "name": "File Explorer like application using which has the same functionalities like Visual Studio Code.",
   "icons": [
     {
       "src": "favicon.ico",
