@@ -6,7 +6,7 @@
     cursor: pointer;
 }
 
-.container:hover {
+.container.selected {
     background-color: #343434;
 }
 

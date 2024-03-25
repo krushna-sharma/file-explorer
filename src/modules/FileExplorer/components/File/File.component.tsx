@@ -1,14 +1,16 @@
 import React, { FC, useState, useEffect, useRef } from "react";
+import cx from "classnames";
 import FileIcon from "./Icons/file_icon.png";
 import FolderIcon from "./Icons/folder_icon.png";
 import FolderOpenIcon from "./Icons/folder_open_icon.png";
 import styles from "./file.module.css";
 import {
-    addFile,
     setIsOpen,
     deleteFile,
     editFileName,
     filesData,
+    selectedFile,
+    updateSelectedFile,
 } from "../../../../store/filesSlice";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import FileActions from "../FileActions/FileActions.component";
@@ -28,6 +30,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
     const [isEditingFileName, setIsEditingFileName] = useState(false);
     const [isHovering, setIsHovering] = useState(false);
     const files = useAppSelector(filesData);
+    const selectedFileId = useAppSelector(selectedFile);
     const dispatch = useAppDispatch();
 
     const inputRef: React.LegacyRef<HTMLInputElement> = useRef(null);
@@ -55,35 +58,35 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
         // dispatch(editFileName({ id, fileName: "testing" }));
     };
 
-    const onNewFileClick = (
-        e: React.MouseEvent<HTMLImageElement, MouseEvent>
-    ) => {
-        // should add new file to the current folder
-        e.stopPropagation();
-        dispatch(
-            addFile({
-                fileName: `${name}_${children?.length}`,
-                parentId: id,
-                fileType: "file",
-                level: level + 1,
-            })
-        );
-    };
+    // const onNewFileClick = (
+    //     e: React.MouseEvent<HTMLImageElement, MouseEvent>
+    // ) => {
+    //     // should add new file to the current folder
+    //     e.stopPropagation();
+    //     dispatch(
+    //         addFile({
+    //             fileName: `${name}_${children?.length}`,
+    //             parentId: id,
+    //             fileType: "file",
+    //             level: level + 1,
+    //         })
+    //     );
+    // };
 
-    const onNewFolderClick = (
-        e: React.MouseEvent<HTMLImageElement, MouseEvent>
-    ) => {
-        // should add new folder to the current folder
-        e.stopPropagation();
-        dispatch(
-            addFile({
-                fileName: `${name}_${children?.length}`,
-                parentId: id,
-                fileType: "folder",
-                level: level + 1,
-            })
-        );
-    };
+    // const onNewFolderClick = (
+    //     e: React.MouseEvent<HTMLImageElement, MouseEvent>
+    // ) => {
+    //     // should add new folder to the current folder
+    //     e.stopPropagation();
+    //     dispatch(
+    //         addFile({
+    //             fileName: `${name}_${children?.length}`,
+    //             parentId: id,
+    //             fileType: "folder",
+    //             level: level + 1,
+    //         })
+    //     );
+    // };
 
     const onDeleteClick = (
         e: React.MouseEvent<HTMLImageElement, MouseEvent>
@@ -109,11 +112,16 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
     return (
         <>
             <div
-                className={styles.container}
+                className={cx(styles.container, {
+                    [styles.selected]: id === selectedFileId,
+                })}
                 style={{ paddingLeft: `${10 * level + 5}px` }}
                 onClick={() => {
                     !isEditingFileName &&
                         dispatch(setIsOpen({ openState: !isOpen, id: id }));
+                    if (selectedFileId !== id) {
+                        dispatch(updateSelectedFile({ selectedFileId: id }));
+                    }
                 }}
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
@@ -139,6 +147,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
                         ref={inputRef}
                         className={styles.fileName}
                         defaultValue={fileName}
+                        onClick={(e) => e.stopPropagation()}
                         onChange={onFileNameChange}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
@@ -151,10 +160,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
 
                 <FileActions
                     show={isHovering}
-                    fileType={fileType}
                     onEditClick={onEditClick}
-                    onNewFileClick={onNewFileClick}
-                    onNewFolderClick={onNewFolderClick}
                     onDeleteClick={onDeleteClick}
                 />
             </div>

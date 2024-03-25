@@ -1,9 +1,14 @@
 import { FileProps } from "../modules/FileExplorer/components/File/File.component";
 import { createSlice } from "@reduxjs/toolkit";
-import { getID } from "../utils/common";
+import { generateID } from "../utils/common";
 import { RootState } from ".";
 
-const initialState: { files: Record<string, FileProps> } = {
+export interface FilesState {
+    files: Record<string, FileProps>;
+    selectedFile: string;
+}
+
+const initialState: FilesState = {
     files: {
         root: {
             fileType: "folder",
@@ -13,6 +18,7 @@ const initialState: { files: Record<string, FileProps> } = {
             level: 0,
         },
     },
+    selectedFile: "",
 };
 
 const filesSlice = createSlice({
@@ -20,19 +26,42 @@ const filesSlice = createSlice({
     initialState: initialState,
     reducers: {
         addFile: (state, props) => {
-            const id = getID();
-            const { fileName, parentId, fileType, level } = props.payload;
-            state.files[id] = {
-                fileType: fileType,
-                id: id,
-                name: fileName,
-                parentId: parentId,
-                isOpen: fileType === "file" ? true : false,
-                level,
-            };
-            if (parentId) {
-                state.files[parentId].isOpen = true;
+            const id = generateID();
+            const { fileName, fileType } = props.payload;
+            if (state.selectedFile) {
+                const {
+                    level: selectedFileLevel,
+                    fileType: selectedFileType,
+                    parentId: selectedParentId,
+                } = state.files[state.selectedFile];
+
+                state.files[id] = {
+                    fileType: fileType,
+                    id: id,
+                    name: fileName,
+                    parentId:
+                        selectedFileType === "folder"
+                            ? state.selectedFile
+                            : selectedParentId,
+                    isOpen: fileType === "file" ? true : false,
+                    level:
+                        selectedFileType === "folder"
+                            ? selectedFileLevel + 1
+                            : selectedFileLevel,
+                };
+            } else {
+                state.files[id] = {
+                    fileType: fileType,
+                    id: id,
+                    name: fileName,
+                    level: 0,
+                };
             }
+            if (state.selectedFile) {
+                state.files[state.selectedFile].isOpen = true;
+            }
+            state.selectedFile = id; // Select the newly added file/folder
+            state.files[state.selectedFile].isOpen = true;
         },
         setIsOpen: (state, props) => {
             // TODO: Might want to check if we want to close all of child folder as well.
@@ -62,9 +91,18 @@ const filesSlice = createSlice({
             }
             delete state.files[props.payload.id];
         },
+        updateSelectedFile: (state, props) => {
+            state.selectedFile = props.payload.selectedFileId;
+        },
     },
 });
 export const filesData = (state: RootState) => state.files.files;
-export const { addFile, setIsOpen, editFileName, deleteFile } =
-    filesSlice.actions;
+export const selectedFile = (state: RootState) => state.files.selectedFile;
+export const {
+    addFile,
+    setIsOpen,
+    editFileName,
+    deleteFile,
+    updateSelectedFile,
+} = filesSlice.actions;
 export default filesSlice.reducer;
