@@ -17,7 +17,7 @@ jobs:
               run: yarn
 
             - name: Run standard version
-              run: npm run release
+              run: yarn release
 
             - name: Push changes to main branch
               uses: ad-m/github-push-action@master
