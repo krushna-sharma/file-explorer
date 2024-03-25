@@ -10,4 +10,4 @@ export const generateRandomID = (length: number) => {
     return result;
 };
 
-export const getID = (l:number = 2) => generateRandomID(8);
+export const generateID = () => generateRandomID(8);

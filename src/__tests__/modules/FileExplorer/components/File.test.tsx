@@ -69,8 +69,13 @@ describe("Testing File component...", () => {
         );
         let fileComponent = screen.getByText("test.tsx");
         userEvent.hover(fileComponent);
-        expect(screen.getByTestId("editIcon")).toBeInTheDocument();
-        expect(screen.getByTestId("deleteIcon")).toBeInTheDocument();
+        let editIcon = screen.getByTestId("editIcon");
+        let deleteIcon = screen.getByTestId("deleteIcon");
+        expect(editIcon).toBeInTheDocument();
+        expect(deleteIcon).toBeInTheDocument();
+        userEvent.unhover(fileComponent);
+        expect(editIcon).not.toBeInTheDocument();
+        expect(deleteIcon).not.toBeInTheDocument();
     });
 
     it("if file type is folder should show a folder icon", () => {
@@ -116,6 +121,25 @@ describe("Testing File component...", () => {
         fireEvent.click(editButton);
         let inputComp = screen.getByDisplayValue("src");
         userEvent.type(inputComp, "source{enter}");
+        expect(dispatch).toHaveBeenCalledWith({
+            payload: { fileName: "srcsource", id: "root" },
+            type: "filesData/editFileName",
+        });
+    });
+
+    it("file name should be updated if the focus is lost while updating the file name", () => {
+        let dispatch = jest.fn();
+        jest.spyOn(Actions, "useAppDispatch").mockReturnValue(dispatch);
+        renderWithProviders(
+            <File fileType={"folder"} name="src" id="root" level={0} />
+        );
+        let fileComponent = screen.getByText("src");
+        userEvent.hover(fileComponent);
+        let editButton = screen.getByTestId("editIcon");
+        fireEvent.click(editButton);
+        let inputComp = screen.getByDisplayValue("src");
+        userEvent.type(inputComp, "source");
+        fireEvent.focusOut(inputComp);
         expect(dispatch).toHaveBeenCalledWith({
             payload: { fileName: "srcsource", id: "root" },
             type: "filesData/editFileName",

@@ -1,9 +1,9 @@
-import { FileProps } from "../../modules/FileExplorer/components/File/File.component";
 import reducer, {
     addFile,
     editFileName,
     deleteFile,
     FilesState,
+    updateSelectedFile,
 } from "../../store/filesSlice";
 import { data } from "../../mockData";
 import * as Utils from "../../utils/common";
@@ -23,9 +23,9 @@ test("should return the initial state", () => {
     });
 });
 
-test("should add a new file", () => {
+test("should add a new file as a child of the selected file", () => {
     const previousState: FilesState = { files: data, selectedFile: "root" };
-    jest.spyOn(Utils, "getID").mockReturnValue("RANDOM_ID");
+    jest.spyOn(Utils, "generateID").mockReturnValue("RANDOM_ID");
     expect(
         reducer(
             previousState,
@@ -57,8 +57,47 @@ test("should add a new file", () => {
     });
 });
 
-test("should delete a file", () => {
+test("should add a new file on the root level if there is no selectedFile", () => {
     const previousState: FilesState = { files: data, selectedFile: "" };
+    jest.spyOn(Utils, "generateID").mockReturnValue("RANDOM_ID");
+    expect(
+        reducer(
+            previousState,
+            addFile({
+                fileName: `src_0`,
+                parentId: "",
+                fileType: "file",
+            })
+        )
+    ).toEqual({
+        selectedFile: "RANDOM_ID",
+        files: {
+            ...data,
+            RANDOM_ID: {
+                fileType: "file",
+                id: "RANDOM_ID",
+                isOpen: true,
+                level: 0,
+                name: "src_0",
+            },
+        },
+    });
+});
+
+test("should delete a file", () => {
+    const previousState: FilesState = {
+        files: {
+            ...data,
+            someId: {
+                fileType: "folder",
+                id: "someId",
+                level: 0,
+                name: "src",
+                parentId: "root",
+            },
+        },
+        selectedFile: "",
+    };
     expect(reducer(previousState, deleteFile({ id: "root" }))).toEqual({
         files: {},
         selectedFile: "",
@@ -70,7 +109,7 @@ test("should edit the fileName", () => {
     expect(
         reducer(previousState, editFileName({ id: "root", fileName: "source" }))
     ).toEqual({
-        "selectedFile": "",
+        selectedFile: "",
         files: {
             root: {
                 ...previousState.files.root,
@@ -80,8 +119,12 @@ test("should edit the fileName", () => {
     });
 });
 
-test("should return a randomID", () => {
-    jest.spyOn(Math, "random").mockImplementation(() => 0.1);
-
-    expect(Utils.generateRandomID(8)).toEqual("GGGGGGGG");
+test("should updated the selectedFile id", () => {
+    const previousState: FilesState = { files: data, selectedFile: "" };
+    expect(
+        reducer(previousState, updateSelectedFile({ selectedFileId: "root" }))
+    ).toEqual({
+        ...previousState,
+        selectedFile: "root",
+    });
 });

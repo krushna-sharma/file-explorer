@@ -1,6 +1,6 @@
 import { FileProps } from "../modules/FileExplorer/components/File/File.component";
 import { createSlice } from "@reduxjs/toolkit";
-import { getID } from "../utils/common";
+import { generateID } from "../utils/common";
 import { RootState } from ".";
 
 export interface FilesState {
@@ -26,7 +26,7 @@ const filesSlice = createSlice({
     initialState: initialState,
     reducers: {
         addFile: (state, props) => {
-            const id = getID();
+            const id = generateID();
             const { fileName, fileType } = props.payload;
             if (state.selectedFile) {
                 const {
@@ -57,7 +57,7 @@ const filesSlice = createSlice({
                     level: 0,
                 };
             }
-            if(state.selectedFile){
+            if (state.selectedFile) {
                 state.files[state.selectedFile].isOpen = true;
             }
             state.selectedFile = id; // Select the newly added file/folder

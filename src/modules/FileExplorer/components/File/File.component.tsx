@@ -147,6 +147,7 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
                         ref={inputRef}
                         className={styles.fileName}
                         defaultValue={fileName}
+                        onClick={(e) => e.stopPropagation()}
                         onChange={onFileNameChange}
                         onKeyDown={(e) => {
                             if (e.key === "Enter") {
