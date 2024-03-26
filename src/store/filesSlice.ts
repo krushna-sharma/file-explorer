@@ -25,6 +25,11 @@ const filesSlice = createSlice({
     name: "filesData",
     initialState: initialState,
     reducers: {
+        updateInitialState: (state, props) => {
+            state.files = props.payload.files || state.files;
+            state.selectedFile =
+                props.payload.selectedFile || state.selectedFile;
+        },
         addFile: (state, props) => {
             const id = generateID();
             const { fileName, fileType } = props.payload;
@@ -104,5 +109,6 @@ export const {
     editFileName,
     deleteFile,
     updateSelectedFile,
+    updateInitialState,
 } = filesSlice.actions;
 export default filesSlice.reducer;

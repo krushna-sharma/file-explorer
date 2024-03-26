@@ -1,9 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import styles from "./FileExplorer.module.css";
 import { useSelector } from "react-redux";
-import { addFile, filesData } from "../../store/filesSlice";
+import { addFile, filesData, updateInitialState } from "../../store/filesSlice";
 import FileActions from "./components/FileActions/FileActions.component";
 import { useAppDispatch } from "../../store/hooks";
+import axios from "axios";
+import { FileProps } from "./components/File/File.component";
 
 const FileList = lazy(
     () => import("./components/FilesList/FilesList.component")
@@ -12,6 +14,45 @@ const FileList = lazy(
 const FileExplorer = () => {
     const files = useSelector(filesData);
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        axios
+            .get(
+                "https://api.github.com/repos/krushna-sharma/file-explorer/git/trees/main?recursive=1"
+            )
+            .then((resp: any) => {
+                let files: Record<string, FileProps> = {};
+                let fileShaMap: Record<string, string> = {};
+                resp.data.tree.forEach(
+                    (val: {
+                        mode: "040000" | "100644";
+                        path: string;
+                        sha: string;
+                    }) => {
+                        let data = val.path.split("/");
+                        fileShaMap[data[data.length - 1]] = val.sha;
+                        if (val.mode === "040000") {
+                            files[val.sha] = {
+                                fileType: "folder",
+                                id: val.sha,
+                                name: data[data.length - 1],
+                                level: data.length,
+                                parentId: fileShaMap[data[data.length - 2]],
+                            };
+                        } else {
+                            files[val.sha] = {
+                                fileType: "file",
+                                id: val.sha,
+                                name: data[data.length - 1],
+                                level: data.length,
+                                parentId: fileShaMap[data[data.length - 2]],
+                            };
+                        }
+                    }
+                );
+                dispatch(updateInitialState({ files }));
+            });
+    }, [dispatch]);
 
     const onNewFileClick = (
         e: React.MouseEvent<HTMLImageElement, MouseEvent>
@@ -41,7 +82,7 @@ const FileExplorer = () => {
 
     return (
         <div className={styles.container}>
-            <div style={{padding: '10px'}}>
+            <div style={{ padding: "10px" }}>
                 <FileActions
                     show
                     isTab

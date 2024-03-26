@@ -4,13 +4,13 @@
     display: flex;
 }
 
-.FileExplorer {
+.fileExplorer {
     width: 300px;
     flex: 1;
     height: 100%;
 }
 
-.content{
+.content {
     flex: 5;
     overflow: scroll;
     padding: 10px;

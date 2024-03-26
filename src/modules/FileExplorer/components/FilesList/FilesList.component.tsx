@@ -19,7 +19,13 @@ const FilesList: FC<FilesListProps> = ({ filesData }) => {
     }, [filesData]);
 
     return (
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                overflowY: "scroll",
+            }}
+        >
             {data.map((file) => {
                 return <File key={file.id} {...file} />;
             })}

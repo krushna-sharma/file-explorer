@@ -30,7 +30,7 @@ function App() {
     return (
         <Provider store={setupStore()}>
             <div className={styles.container}>
-                <div className={styles.FileExplorer}>
+                <div className={styles.fileExplorer}>
                     <FileExplorer />
                 </div>
                 <div className={styles.content}>
