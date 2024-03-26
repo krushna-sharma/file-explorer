@@ -18,7 +18,7 @@ const FileExplorer = () => {
   useEffect(() => {
     axios
       .get(
-        "https://api.github.com/repos/krushna-sharma/file-explorer/git/trees/feature-vs-code?recursive=1"
+        "https://api.github.com/repos/krushna-sharma/file-explorer/git/trees/main?recursive=1"
       )
       .then((resp: any) => {
         let files: Record<string, FileProps> = {};
