@@ -57,36 +57,6 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
         setIsEditingFileName(true);
     };
 
-    // const onNewFileClick = (
-    //     e: React.MouseEvent<HTMLImageElement, MouseEvent>
-    // ) => {
-    //     // should add new file to the current folder
-    //     e.stopPropagation();
-    //     dispatch(
-    //         addFile({
-    //             fileName: `${name}_${children?.length}`,
-    //             parentId: id,
-    //             fileType: "file",
-    //             level: level + 1,
-    //         })
-    //     );
-    // };
-
-    // const onNewFolderClick = (
-    //     e: React.MouseEvent<HTMLImageElement, MouseEvent>
-    // ) => {
-    //     // should add new folder to the current folder
-    //     e.stopPropagation();
-    //     dispatch(
-    //         addFile({
-    //             fileName: `${name}_${children?.length}`,
-    //             parentId: id,
-    //             fileType: "folder",
-    //             level: level + 1,
-    //         })
-    //     );
-    // };
-
     const onDeleteClick = (
         e: React.MouseEvent<HTMLImageElement, MouseEvent>
     ) => {
