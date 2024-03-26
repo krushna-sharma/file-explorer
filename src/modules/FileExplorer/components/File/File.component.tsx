@@ -55,7 +55,6 @@ const File: FC<FileProps> = ({ fileType, name, id, isOpen, level }) => {
         // should edit the file/folder name
         e.stopPropagation();
         setIsEditingFileName(true);
-        // dispatch(editFileName({ id, fileName: "testing" }));
     };
 
     // const onNewFileClick = (
