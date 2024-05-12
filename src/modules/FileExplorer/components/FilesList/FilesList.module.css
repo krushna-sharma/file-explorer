@@ -1,0 +1,9 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar{
+    display: none;
+}
