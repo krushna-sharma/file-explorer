@@ -24,7 +24,7 @@ jobs:
         run: yarn add conventional-changelog-cli
 
       - name: Update changelog
-        run: conventional-changelog -p conventionalcommits -i CHANGELOG.md -s
+        run: yarn release2
 
       - name: Commit and push changelog
         run: |
