@@ -8,7 +8,6 @@ import {
 import styles from "./header.module.css";
 import cx from "classnames";
 import { useAppDispatch } from "../../../../store/hooks";
-import { dataWithFile } from "../../../../mockData";
 
 const FileBox = ({ fileData }: any) => {
   const [showCloseBtn, setShowCloseBtn] = useState(false);
@@ -20,7 +19,9 @@ const FileBox = ({ fileData }: any) => {
   };
   return (
     <span
-      className={cx(styles.fileBox, { [styles.selected]: file == fileData.id })}
+      className={cx(styles.fileBox, {
+        [styles.selected]: file === fileData.id,
+      })}
       onMouseEnter={() => setShowCloseBtn(true)}
       onMouseLeave={() => setShowCloseBtn(false)}
       onClick={() => dispatch(updateSelectedFile(fileData.id))}
