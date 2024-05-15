@@ -27,25 +27,14 @@ const FileExplorer = () => {
           (val: { mode: "040000" | "100644"; path: string; sha: string }) => {
             let data = val.path.split("/");
             fileShaMap[data[data.length - 1]] = val.sha;
-            if (val.mode === "040000") {
-              files[val.sha] = {
-                fileType: "folder",
-                id: val.sha,
-                name: data[data.length - 1],
-                level: data.length,
-                path: val.path,
-                parentId: fileShaMap[data[data.length - 2]],
-              };
-            } else {
-              files[val.sha] = {
-                fileType: "file",
-                id: val.sha,
-                name: data[data.length - 1],
-                level: data.length,
-                path: val.path,
-                parentId: fileShaMap[data[data.length - 2]],
-              };
-            }
+            files[val.sha] = {
+              fileType: val.mode === "040000" ? "folder" : "file",
+              id: val.sha,
+              name: data[data.length - 1],
+              level: data.length,
+              path: val.path,
+              parentId: fileShaMap[data[data.length - 2]],
+            };
           }
         );
         dispatch(updateInitialState({ files }));

@@ -4,6 +4,7 @@ import reducer, {
   deleteFile,
   FilesState,
   updateSelectedFile,
+  updateInitialState,
 } from "../../store/filesSlice";
 import { data } from "../../mockData";
 import * as Utils from "../../utils/common";
@@ -101,6 +102,14 @@ test("should delete a file", () => {
         parentId: "root",
         path: "root/src",
       },
+      anotherId: {
+        fileType: "file",
+        id: "anotherId",
+        level: 0,
+        name: "index.js",
+        parentId: "someId",
+        path: "root/index.js",
+      },
     },
     selectedFile: "",
   };
@@ -132,5 +141,26 @@ test("should updated the selectedFile id", () => {
   ).toEqual({
     ...previousState,
     selectedFile: "root",
+  });
+});
+
+test("should update the initial state", () => {
+  const previousState: FilesState = { files: data, selectedFile: "" };
+  expect(
+    reducer(
+      previousState,
+      updateInitialState({ files: {}, selectedFile: "root" })
+    )
+  ).toEqual({
+    files: {},
+    selectedFile: "root",
+  });
+});
+
+test("should update the initial state", () => {
+  const previousState: FilesState = { files: data, selectedFile: "" };
+  expect(reducer(previousState, updateInitialState({}))).toEqual({
+    ...previousState,
+    selectedFile: "",
   });
 });

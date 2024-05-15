@@ -25,6 +25,7 @@ const Editor = () => {
           }
         })
         .catch((err) => {
+          console.log(err);
           setLoading(false);
         });
     };

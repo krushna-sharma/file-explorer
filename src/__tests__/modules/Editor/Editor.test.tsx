@@ -35,6 +35,35 @@ describe("Testing Editor component", () => {
                 fileType: "file",
                 id: "app",
                 level: 1,
+                name: "App.json",
+                path: "root/App.json",
+              },
+            },
+          },
+          selectedFile: "app",
+        },
+      },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/John/)).toBeInTheDocument();
+    });
+  });
+
+  it("should render file content as it is if it is not a json file", async () => {
+    jest
+      .spyOn(axios, "get")
+      .mockReturnValue(Promise.resolve({ data: "console.log('data');" }));
+    renderWithProviders(<Editor />, {
+      preloadedState: {
+        files: {
+          files: {
+            ...data,
+            ...{
+              app: {
+                fileType: "file",
+                id: "app",
+                level: 1,
                 name: "App.tsx",
                 path: "root/App.tsx",
               },
@@ -46,7 +75,7 @@ describe("Testing Editor component", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/John/)).toBeInTheDocument();
+      expect(screen.getByText(/console.log/)).toBeInTheDocument();
     });
   });
 
@@ -78,5 +107,36 @@ describe("Testing Editor component", () => {
     expect(axiosMock).toHaveBeenCalledWith(
       "https://raw.githubusercontent.com/krushna-sharma/file-explorer/feature-vs-code/root/App.tsx"
     );
+  });
+
+  it("should hide the loader if the api call fails", async () => {
+    jest.spyOn(axios, "get").mockReturnValue(Promise.reject("Error"));
+
+    renderWithProviders(<Editor />, {
+      preloadedState: {
+        files: {
+          files: {
+            ...data,
+            ...{
+              app: {
+                fileType: "file",
+                id: "app",
+                level: 1,
+                name: "App.tsx",
+                path: "root/App.tsx",
+              },
+            },
+          },
+          selectedFile: "app",
+        },
+      },
+    });
+    await waitFor(() => {
+      expect(screen.queryByText("loading...")).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText("loading...")).not.toBeInTheDocument();
+    });
   });
 });
