@@ -1,14 +1,12 @@
-name: Update Changelog
+name: Release
 
 on:
   push:
     branches:
       - feature-vs-code
-    tags:
-      - "*"
 
 jobs:
-  changelog:
+  release:
     runs-on: ubuntu-latest
 
     steps:
