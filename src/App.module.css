@@ -2,7 +2,6 @@
     width: 100vw;
     height: 100vh;
     display: flex;
-    overflow: hidden;
 }
 
 .fileExplorer {
@@ -13,6 +12,9 @@
 
 .content {
     flex: 5;
-    overflow: scroll;
-    padding: 10px;
+    overflow: hidden;
+}
+
+.content::-webkit-scrollbar{
+    display: none;
 }

@@ -9,3 +9,23 @@ export const data: Record<string, FileProps> = {
     path: "",
   },
 };
+
+export const dataWithFile: Record<string, FileProps> = {
+  ...data,
+  someId: {
+    fileType: "folder",
+    id: "someId",
+    level: 0,
+    name: "src",
+    parentId: "root",
+    path: "root/src",
+  },
+  anotherId: {
+    fileType: "file",
+    id: "anotherId",
+    level: 0,
+    name: "index.js",
+    parentId: "someId",
+    path: "root/index.js",
+  },
+};

@@ -1,0 +1,30 @@
+.container{
+    display: flex;
+    height: 20px;
+    background-color: #373830;
+}
+
+.fileBox{
+    padding: 2px 5px;
+    font-size: 12px;
+    color: #fff;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.fileBox>button{
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    color: #fff;
+    margin-left: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.fileBox.selected{
+    border-top: 1px solid #fd971f;
+    background-color: #272822;
+}
