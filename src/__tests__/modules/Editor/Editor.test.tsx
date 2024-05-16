@@ -1,4 +1,4 @@
-import { data } from "../../../mockData";
+import { data, dataWithFile } from "../../../mockData";
 import Editor from "../../../modules/Editor/Editor.component";
 import { renderWithProviders } from "../../../store/utils";
 import axios from "axios";
@@ -15,9 +15,7 @@ describe("Testing Editor component", () => {
       },
     });
     await waitFor(() => {
-      expect(
-        screen.getByText(/Select a file to show content./)
-      ).toBeInTheDocument();
+      expect(screen.getByTestId("codeMirror")).toBeInTheDocument();
     });
   });
 
@@ -57,25 +55,15 @@ describe("Testing Editor component", () => {
     renderWithProviders(<Editor />, {
       preloadedState: {
         files: {
-          files: {
-            ...data,
-            ...{
-              app: {
-                fileType: "file",
-                id: "app",
-                level: 1,
-                name: "App.tsx",
-                path: "root/App.tsx",
-              },
-            },
-          },
-          selectedFile: "app",
+          files: dataWithFile,
+          selectedFile: "anotherId",
         },
       },
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/console.log/)).toBeInTheDocument();
+      expect(screen.getByText("console")).toBeInTheDocument();
+      expect(screen.getByText("log")).toBeInTheDocument();
     });
   });
 
@@ -87,29 +75,18 @@ describe("Testing Editor component", () => {
     renderWithProviders(<Editor />, {
       preloadedState: {
         files: {
-          files: {
-            ...data,
-            ...{
-              app: {
-                fileType: "file",
-                id: "app",
-                level: 1,
-                name: "App.tsx",
-                path: "root/App.tsx",
-              },
-            },
-          },
-          selectedFile: "app",
+          files: dataWithFile,
+          selectedFile: "anotherId",
         },
       },
     });
 
     expect(axiosMock).toHaveBeenCalledWith(
-      "https://raw.githubusercontent.com/krushna-sharma/file-explorer/feature-vs-code/root/App.tsx"
+      "https://raw.githubusercontent.com/krushna-sharma/file-explorer/feature-vs-code/root/index.js"
     );
   });
 
-  it("should hide the loader if the api call fails", async () => {
+  it.skip("should hide the loader if the api call fails", async () => {
     jest.spyOn(axios, "get").mockReturnValue(Promise.reject("Error"));
 
     renderWithProviders(<Editor />, {

@@ -4,11 +4,15 @@
     "private": true,
     "homepage": "file-explorer",
     "dependencies": {
+        "@codemirror/lang-javascript": "^6.2.2",
         "@reduxjs/toolkit": "^2.2.1",
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
+        "@uiw/codemirror-theme-okaidia": "^4.22.0",
+        "@uiw/react-codemirror": "^4.22.0",
         "axios": "^1.6.7",
+        "conventional-changelog-cli": "^5.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-redux": "^9.1.0",
@@ -22,7 +26,6 @@
         "@types/node": "^16.18.82",
         "@types/react": "^18.2.57",
         "@types/react-dom": "^18.2.19",
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "react-scripts": "5.0.1",
         "standard-version": "^9.5.0"
     },
@@ -32,7 +35,8 @@
         "test": "react-scripts test",
         "test:coverage": "yarn test -- --coverage --watchAll=false",
         "eject": "react-scripts eject",
-        "release": "standard-version"
+        "release": "standard-version",
+        "release2": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
     },
     "jest": {
         "collectCoverageFrom": [
@@ -62,6 +66,45 @@
             "last 1 chrome version",
             "last 1 firefox version",
             "last 1 safari version"
+        ]
+    },
+    "standard-version": {
+        "skip": {
+            "tag": false
+        },
+        "types": [
+            {
+                "type": "feat",
+                "section": "Features"
+            },
+            {
+                "type": "fix",
+                "section": "Bug Fixes"
+            },
+            {
+                "type": "chore",
+                "hidden": true
+            },
+            {
+                "type": "docs",
+                "hidden": true
+            },
+            {
+                "type": "style",
+                "hidden": true
+            },
+            {
+                "type": "refactor",
+                "hidden": true
+            },
+            {
+                "type": "perf",
+                "hidden": true
+            },
+            {
+                "type": "test",
+                "hidden": true
+            }
         ]
     }
 }

@@ -6,7 +6,7 @@ import reducer, {
   updateSelectedFile,
   updateInitialState,
 } from "../../store/filesSlice";
-import { data } from "../../mockData";
+import { data, dataWithFile } from "../../mockData";
 import * as Utils from "../../utils/common";
 
 test("should return the initial state", () => {
@@ -92,25 +92,7 @@ test("should add a new file on the root level if there is no selectedFile", () =
 
 test("should delete a file", () => {
   const previousState: FilesState = {
-    files: {
-      ...data,
-      someId: {
-        fileType: "folder",
-        id: "someId",
-        level: 0,
-        name: "src",
-        parentId: "root",
-        path: "root/src",
-      },
-      anotherId: {
-        fileType: "file",
-        id: "anotherId",
-        level: 0,
-        name: "index.js",
-        parentId: "someId",
-        path: "root/index.js",
-      },
-    },
+    files: dataWithFile,
     selectedFile: "",
   };
   expect(reducer(previousState, deleteFile({ id: "root" }))).toEqual({
