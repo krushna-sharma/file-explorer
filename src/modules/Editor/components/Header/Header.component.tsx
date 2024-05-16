@@ -4,18 +4,22 @@ import {
   filesData,
   selectedFile,
   updateSelectedFile,
+  removeRecentFiles,
 } from "../../../../store/filesSlice";
 import styles from "./header.module.css";
 import cx from "classnames";
 import { useAppDispatch } from "../../../../store/hooks";
+import { RootState } from "../../../../store";
 
 const FileBox = ({ fileData }: any) => {
   const [showCloseBtn, setShowCloseBtn] = useState(false);
   const file = useSelector(selectedFile);
   const dispatch = useAppDispatch();
 
-  const onFileClose = (fileId: string) => {
-    dispatch(updateSelectedFile(""));
+  const onFileClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(removeRecentFiles({ fileId: fileData.id }));
   };
   return (
     <span
@@ -24,12 +28,12 @@ const FileBox = ({ fileData }: any) => {
       })}
       onMouseEnter={() => setShowCloseBtn(true)}
       onMouseLeave={() => setShowCloseBtn(false)}
-      onClick={() => dispatch(updateSelectedFile(fileData.id))}
+      onClick={() =>
+        dispatch(updateSelectedFile({ selectedFileId: fileData.id }))
+      }
     >
       {fileData.name}
-      {showCloseBtn && (
-        <button onClick={() => onFileClose(fileData.id)}>×</button>
-      )}
+      {showCloseBtn && <button onClick={onFileClose}>×</button>}
 
       {!showCloseBtn && <span style={{ height: "16px", width: "14px" }}></span>}
     </span>
@@ -38,14 +42,17 @@ const FileBox = ({ fileData }: any) => {
 
 const EditorHeader = () => {
   const files = useSelector(filesData);
-  const file = useSelector(selectedFile);
+  const recentFiles = useSelector(
+    (state: RootState) => state.files.recentFiles
+  );
+  console.log(recentFiles);
 
-  return file && files?.[file].fileType === "file" ? (
+  return (
     <div className={styles.container}>
-      <FileBox fileData={files[file]} />
+      {recentFiles?.map((recentFileId) => (
+        <FileBox key={recentFileId} fileData={files[recentFileId]} />
+      ))}
     </div>
-  ) : (
-    <></>
   );
 };
 

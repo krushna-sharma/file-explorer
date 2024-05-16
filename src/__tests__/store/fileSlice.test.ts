@@ -5,6 +5,7 @@ import reducer, {
   FilesState,
   updateSelectedFile,
   updateInitialState,
+  removeRecentFiles,
 } from "../../store/filesSlice";
 import { data, dataWithFile } from "../../mockData";
 import * as Utils from "../../utils/common";
@@ -22,11 +23,15 @@ test("should return the initial state", () => {
         path: "",
       },
     },
+    recentFiles: [],
   });
 });
 
 test("should add a new file as a child of the selected file", () => {
-  const previousState: FilesState = { files: data, selectedFile: "root" };
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "root",
+  };
   jest.spyOn(Utils, "generateID").mockReturnValue("RANDOM_ID");
   expect(
     reducer(
@@ -62,7 +67,10 @@ test("should add a new file as a child of the selected file", () => {
 });
 
 test("should add a new file on the root level if there is no selectedFile", () => {
-  const previousState: FilesState = { files: data, selectedFile: "" };
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
   jest.spyOn(Utils, "generateID").mockReturnValue("RANDOM_ID");
   expect(
     reducer(
@@ -102,7 +110,10 @@ test("should delete a file", () => {
 });
 
 test("should edit the fileName", () => {
-  const previousState: FilesState = { files: data, selectedFile: "" };
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
   expect(
     reducer(previousState, editFileName({ id: "root", fileName: "source" }))
   ).toEqual({
@@ -117,17 +128,24 @@ test("should edit the fileName", () => {
 });
 
 test("should updated the selectedFile id", () => {
-  const previousState: FilesState = { files: data, selectedFile: "" };
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
   expect(
     reducer(previousState, updateSelectedFile({ selectedFileId: "root" }))
   ).toEqual({
     ...previousState,
     selectedFile: "root",
+    recentFiles: ["root"],
   });
 });
 
 test("should update the initial state", () => {
-  const previousState: FilesState = { files: data, selectedFile: "" };
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
   expect(
     reducer(
       previousState,
@@ -139,10 +157,30 @@ test("should update the initial state", () => {
   });
 });
 
-test("should update the initial state", () => {
-  const previousState: FilesState = { files: data, selectedFile: "" };
+test("should not update the initial state", () => {
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
   expect(reducer(previousState, updateInitialState({}))).toEqual({
     ...previousState,
     selectedFile: "",
+  });
+});
+
+test("should update the recent files state", () => {
+  const previousState: FilesState = {
+    files: data,
+    selectedFile: "",
+  };
+
+  expect(
+    reducer(
+      { ...previousState, recentFiles: ["id"] },
+      removeRecentFiles({ fileId: "id" })
+    )
+  ).toEqual({
+    ...previousState,
+    recentFiles: [],
   });
 });
