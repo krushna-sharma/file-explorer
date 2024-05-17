@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   filesData,
@@ -10,11 +10,16 @@ import styles from "./header.module.css";
 import cx from "classnames";
 import { useAppDispatch } from "../../../../store/hooks";
 import { RootState } from "../../../../store";
+import { FileProps } from "../../../FileExplorer/components/File/File.component";
 
-const FileBox = ({ fileData }: any) => {
-  const [showCloseBtn, setShowCloseBtn] = useState(false);
+const FileBox = ({ fileData }: { fileData: FileProps }) => {
   const file = useSelector(selectedFile);
+  const [showCloseBtn, setShowCloseBtn] = useState(file === fileData.id);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setShowCloseBtn(file === fileData.id);
+  }, [file, fileData.id]);
 
   const onFileClose = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -26,8 +31,8 @@ const FileBox = ({ fileData }: any) => {
       className={cx(styles.fileBox, {
         [styles.selected]: file === fileData.id,
       })}
-      onMouseEnter={() => setShowCloseBtn(true)}
-      onMouseLeave={() => setShowCloseBtn(false)}
+      onMouseEnter={() => file !== fileData.id && setShowCloseBtn(true)}
+      onMouseLeave={() => file !== fileData.id && setShowCloseBtn(false)}
       onClick={() =>
         dispatch(updateSelectedFile({ selectedFileId: fileData.id }))
       }
