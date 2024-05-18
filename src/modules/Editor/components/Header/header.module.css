@@ -1,7 +1,13 @@
 .container{
     display: flex;
-    height: 20px;
+    min-height: 20px;
     background-color: #373830;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.container::-webkit-scrollbar{
+    display: none;
 }
 
 .fileBox{
