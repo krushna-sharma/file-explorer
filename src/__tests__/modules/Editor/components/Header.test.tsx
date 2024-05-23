@@ -11,6 +11,7 @@ describe("Testing Editor Header component", () => {
         files: {
           files: dataWithFile,
           selectedFile: "anotherId",
+          recentFiles: ["anotherId"],
         },
       },
     });
@@ -18,18 +19,30 @@ describe("Testing Editor Header component", () => {
     expect(screen.getByText(/index.js/)).toBeInTheDocument();
   });
 
-  // TODO: Update the test case
-  it.skip("clicking on the file box should select it", () => {
+  it("clicking on the file box should select it", () => {
     renderWithProviders(<EditorHeader />, {
       preloadedState: {
         files: {
-          files: dataWithFile,
-          selectedFile: "anotherId",
+          files: {
+            ...dataWithFile,
+            ...{
+              randomId: {
+                fileType: "file",
+                id: "randomId",
+                level: 2,
+                name: "name.ts",
+                path: "path",
+              },
+            },
+          },
+          selectedFile: "randomId",
+          recentFiles: ["anotherId", "randomId"],
         },
       },
     });
-
-    // expect()
+    const fileBox = screen.getByText("name.ts");
+    fireEvent.click(fileBox);
+    expect(fileBox).toHaveClass("selected");
   });
 
   it("clicking on close should close the file and remove it from the header", () => {
@@ -38,6 +51,7 @@ describe("Testing Editor Header component", () => {
         files: {
           files: dataWithFile,
           selectedFile: "anotherId",
+          recentFiles: ["anotherId"],
         },
       },
     });
@@ -55,7 +69,8 @@ describe("Testing Editor Header component", () => {
       preloadedState: {
         files: {
           files: dataWithFile,
-          selectedFile: "anotherId",
+          selectedFile: "",
+          recentFiles: ["anotherId", "newId"],
         },
       },
     });

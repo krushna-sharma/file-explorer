@@ -1,35 +1,44 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   filesData,
   selectedFile,
   updateSelectedFile,
+  removeRecentFiles,
 } from "../../../../store/filesSlice";
 import styles from "./header.module.css";
 import cx from "classnames";
 import { useAppDispatch } from "../../../../store/hooks";
+import { RootState } from "../../../../store";
+import { FileProps } from "../../../FileExplorer/components/File/File.component";
 
-const FileBox = ({ fileData }: any) => {
-  const [showCloseBtn, setShowCloseBtn] = useState(false);
+const FileBox = ({ fileData }: { fileData: FileProps }) => {
   const file = useSelector(selectedFile);
+  const [showCloseBtn, setShowCloseBtn] = useState(file === fileData.id);
   const dispatch = useAppDispatch();
 
-  const onFileClose = (fileId: string) => {
-    dispatch(updateSelectedFile(""));
+  useEffect(() => {
+    setShowCloseBtn(file === fileData.id);
+  }, [file, fileData.id]);
+
+  const onFileClose = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dispatch(removeRecentFiles({ fileId: fileData.id }));
   };
   return (
     <span
       className={cx(styles.fileBox, {
         [styles.selected]: file === fileData.id,
       })}
-      onMouseEnter={() => setShowCloseBtn(true)}
-      onMouseLeave={() => setShowCloseBtn(false)}
-      onClick={() => dispatch(updateSelectedFile(fileData.id))}
+      onMouseEnter={() => file !== fileData.id && setShowCloseBtn(true)}
+      onMouseLeave={() => file !== fileData.id && setShowCloseBtn(false)}
+      onClick={() =>
+        dispatch(updateSelectedFile({ selectedFileId: fileData.id }))
+      }
     >
       {fileData.name}
-      {showCloseBtn && (
-        <button onClick={() => onFileClose(fileData.id)}>×</button>
-      )}
+      {showCloseBtn && <button onClick={onFileClose}>×</button>}
 
       {!showCloseBtn && <span style={{ height: "16px", width: "14px" }}></span>}
     </span>
@@ -38,14 +47,16 @@ const FileBox = ({ fileData }: any) => {
 
 const EditorHeader = () => {
   const files = useSelector(filesData);
-  const file = useSelector(selectedFile);
+  const recentFiles = useSelector(
+    (state: RootState) => state.files.recentFiles
+  );
 
-  return file && files?.[file].fileType === "file" ? (
+  return (
     <div className={styles.container}>
-      <FileBox fileData={files[file]} />
+      {recentFiles?.map((recentFileId) => (
+        <FileBox key={recentFileId} fileData={files[recentFileId]} />
+      ))}
     </div>
-  ) : (
-    <></>
   );
 };
 

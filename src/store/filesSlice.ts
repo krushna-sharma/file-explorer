@@ -6,6 +6,7 @@ import { RootState } from ".";
 export interface FilesState {
   files: Record<string, FileProps>;
   selectedFile: string;
+  recentFiles?: string[];
 }
 
 const initialState: FilesState = {
@@ -20,6 +21,7 @@ const initialState: FilesState = {
     },
   },
   selectedFile: "",
+  recentFiles: [],
 };
 
 const filesSlice = createSlice({
@@ -98,8 +100,33 @@ const filesSlice = createSlice({
       }
       delete state.files[props.payload.id];
     },
-    updateSelectedFile: (state, props) => {
-      state.selectedFile = props.payload.selectedFileId;
+    updateSelectedFile: (
+      state: FilesState,
+      props: {
+        type: string;
+        payload: { selectedFileId: string };
+      }
+    ) => {
+      const selectedFileId = props.payload.selectedFileId;
+      state.selectedFile = selectedFileId;
+      if (
+        state.files[selectedFileId].fileType === "file" &&
+        !state?.recentFiles?.includes(selectedFileId)
+      )
+        state.recentFiles = (state?.recentFiles || []).concat(selectedFileId);
+    },
+
+    removeRecentFiles: (state, props) => {
+      // const action = props.payload.action as "ADD" | "DELETE";
+      // if (action === "ADD") {
+      //   state.recentFiles = (state?.recentFiles || []).concat(
+      //     props.payload.fileId
+      //   );
+      // } else {
+      state.recentFiles = (state?.recentFiles || []).filter(
+        (id) => id !== props.payload.fileId
+      );
+      // }
     },
   },
 });
@@ -112,5 +139,6 @@ export const {
   deleteFile,
   updateSelectedFile,
   updateInitialState,
+  removeRecentFiles,
 } = filesSlice.actions;
 export default filesSlice.reducer;
