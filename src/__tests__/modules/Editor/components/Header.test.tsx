@@ -40,12 +40,9 @@ describe("Testing Editor Header component", () => {
         },
       },
     });
-    console.log(screen.debug());
     const fileBox = screen.getByText("name.ts");
     fireEvent.click(fileBox);
     expect(fileBox).toHaveClass("selected");
-
-    // expect()
   });
 
   it("clicking on close should close the file and remove it from the header", () => {
@@ -72,8 +69,8 @@ describe("Testing Editor Header component", () => {
       preloadedState: {
         files: {
           files: dataWithFile,
-          selectedFile: "anotherId",
-          recentFiles: ["anotherId"],
+          selectedFile: "",
+          recentFiles: ["anotherId", "newId"],
         },
       },
     });

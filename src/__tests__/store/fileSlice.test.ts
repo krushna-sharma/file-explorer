@@ -127,17 +127,17 @@ test("should edit the fileName", () => {
   });
 });
 
-test("should updated the selectedFile id", () => {
+test("should update the selectedFile id", () => {
   const previousState: FilesState = {
-    files: data,
+    files: dataWithFile,
     selectedFile: "",
   };
   expect(
-    reducer(previousState, updateSelectedFile({ selectedFileId: "root" }))
+    reducer(previousState, updateSelectedFile({ selectedFileId: "newId" }))
   ).toEqual({
     ...previousState,
-    selectedFile: "root",
-    recentFiles: ["root"],
+    selectedFile: "newId",
+    recentFiles: ["newId"],
   });
 });
 

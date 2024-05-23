@@ -123,7 +123,6 @@ const filesSlice = createSlice({
       //     props.payload.fileId
       //   );
       // } else {
-      console.log(props.payload.fileId, state);
       state.recentFiles = (state?.recentFiles || []).filter(
         (id) => id !== props.payload.fileId
       );

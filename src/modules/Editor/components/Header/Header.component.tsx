@@ -50,7 +50,6 @@ const EditorHeader = () => {
   const recentFiles = useSelector(
     (state: RootState) => state.files.recentFiles
   );
-  console.log(recentFiles);
 
   return (
     <div className={styles.container}>

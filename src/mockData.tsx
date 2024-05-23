@@ -23,9 +23,17 @@ export const dataWithFile: Record<string, FileProps> = {
   anotherId: {
     fileType: "file",
     id: "anotherId",
-    level: 0,
+    level: 1,
     name: "index.js",
     parentId: "someId",
     path: "root/index.js",
+  },
+  newId: {
+    fileType: "file",
+    id: "newId",
+    level: 1,
+    name: "newId.js",
+    parentId: "someId",
+    path: "root/newId.js",
   },
 };
